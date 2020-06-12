@@ -1,0 +1,34 @@
+- name: Reconfigure nginx core
+  import_role:
+    name: cs.nginx
+  vars: { nginx_skip_meta_dependency: yes }
+
+- name: Reconfigure nginx for url blacklisting
+  import_role:
+    name: cs.nginx-url-blacklist
+  vars: { nginx_skip_meta_dependency: yes }
+
+- name: Reconfigure nginx for language redirects
+  import_role:
+    name: cs.nginx-language-redirect
+  vars: { nginx_skip_meta_dependency: yes }
+  when: mageops_language_redirect_enable
+
+- name: Reconfigure nginx for magento
+  import_role:
+    name: cs.nginx-magento
+  vars: { nginx_skip_meta_dependency: yes }
+
+- name: Reconfigure nginx for https termination
+  import_role:
+    name: cs.nginx-https-termination
+  vars: { nginx_skip_meta_dependency: yes }
+  when: mageops_https_termination_enable
+
+- name: Reconfigure varnish
+  import_role:
+    name: cs.varnish
+
+- name: Force handler flush so new configuration is applied
+  meta: flush_handlers
+

@@ -1,0 +1,9 @@
+- name: Set global provisioning options
+  set_fact:
+    magento_mode: "{{ raccoon_project_production_mode | ternary('production', 'default') }}"
+
+- name: Execute raccoon commands
+  include_tasks: "cmd.yml"
+  loop: "{{ raccoon_execute_commands }}"
+  loop_control:
+    loop_var: raccoon_command
