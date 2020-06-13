@@ -15,85 +15,85 @@
     php_opcache_revalidate_path: 0
   when: raccoon_project_production_mode
 
-# - name: Install Magento sources
-#   become: yes
-#   become_user: "{{ magento_user }}"
-#   block:
-#     - name: "Make sure release directory exists"
-#       file:
-#         path: "{{ raccoon_demo_app_dir }}"
-#         state: directory
+- name: Install Magento sources
+  become: yes
+  become_user: "{{ magento_user }}"
+  block:
+    - name: "Make sure release directory exists"
+      file:
+        path: "{{ raccoon_demo_app_dir }}"
+        state: directory
 
-#     - name: "Install Magento release: {{ raccoon_demo_magento_version }}"
-#       unarchive:
-#         src: "{{ raccoon_demo_magento_release_url }}"
-#         dest: "{{ raccoon_demo_app_dir }}"
-#         creates: "{{ raccoon_demo_app_dir }}/composer.json"
-#         extra_opts: [ "--strip-components=1" ]
-#         remote_src: yes
+    - name: "Install Magento release: {{ raccoon_demo_magento_version }}"
+      unarchive:
+        src: "{{ raccoon_demo_magento_release_url }}"
+        dest: "{{ raccoon_demo_app_dir }}"
+        creates: "{{ raccoon_demo_app_dir }}/composer.json"
+        extra_opts: [ "--strip-components=1" ]
+        remote_src: yes
 
-#     - name: "Install Magento Inventory release: {{ raccoon_demo_magento_inventory_version }}"
-#       unarchive:
-#         src: "{{ raccoon_demo_magento_inventory_release_url }}"
-#         dest: "{{ raccoon_demo_app_dir }}/app/code/Magento"
-#         creates: "{{ raccoon_demo_app_dir }}/app/code/Magento/_metapackage/composer.json"
-#         extra_opts: [ "--strip-components=1" ]
-#         remote_src: yes
+    - name: "Install Magento Inventory release: {{ raccoon_demo_magento_inventory_version }}"
+      unarchive:
+        src: "{{ raccoon_demo_magento_inventory_release_url }}"
+        dest: "{{ raccoon_demo_app_dir }}/app/code/Magento"
+        creates: "{{ raccoon_demo_app_dir }}/app/code/Magento/_metapackage/composer.json"
+        extra_opts: [ "--strip-components=1" ]
+        remote_src: yes
 
-#     - name: "Install Magento Sample Data release: {{ raccoon_demo_magento_sample_data_version }}"
-#       unarchive:
-#         src: "{{ raccoon_demo_magento_sample_data_release_url }}"
-#         dest: "{{ raccoon_demo_app_dir }}"
-#         creates: "{{ raccoon_demo_app_dir }}/pub/media/composer.json"
-#         extra_opts: [ "--strip-components=1" ]
-#         remote_src: yes
-#       when: raccoon_demo_magento_sample_data_install
+    - name: "Install Magento Sample Data release: {{ raccoon_demo_magento_sample_data_version }}"
+      unarchive:
+        src: "{{ raccoon_demo_magento_sample_data_release_url }}"
+        dest: "{{ raccoon_demo_app_dir }}"
+        creates: "{{ raccoon_demo_app_dir }}/pub/media/composer.json"
+        extra_opts: [ "--strip-components=1" ]
+        remote_src: yes
+      when: raccoon_demo_magento_sample_data_install
 
-#     - name: "Prepare composer.json files for merging"
-#       copy:
-#         src: "{{ raccoon_demo_app_dir }}/{{ item[0] }}"
-#         dest: "{{ raccoon_demo_app_dir }}/{{ item[1] }}"
-#         remote_src: yes
-#       loop:
-#         - [ composer.json, composer.magento.json ]
-#         - [ app/code/Magento/_metapackage/composer.json, composer.msi.json ]
+    - name: "Prepare composer.json files for merging"
+      copy:
+        src: "{{ raccoon_demo_app_dir }}/{{ item[0] }}"
+        dest: "{{ raccoon_demo_app_dir }}/{{ item[1] }}"
+        remote_src: yes
+      loop:
+        - [ composer.json, composer.magento.json ]
+        - [ app/code/Magento/_metapackage/composer.json, composer.msi.json ]
 
-#     - name: "Compute composer.json with MSI packages replaced"
-#       command:
-#         argv:
-#           - jq
-#           - -sSM
-#           - >
-#               ( .[0].require[] | select( . == "*" ) ) = .[0].version
-#                 | .[1].replace += .[0].require
-#                 | .[1]
-#           - composer.msi.json
-#           - composer.magento.json
-#         chdir: "{{ raccoon_demo_app_dir }}"
-#       changed_when: false
-#       register: composer_json_msi_update
+    - name: "Compute composer.json with MSI packages replaced"
+      command:
+        argv:
+          - jq
+          - -sSM
+          - >
+              ( .[0].require[] | select( . == "*" ) ) = .[0].version
+                | .[1].replace += .[0].require
+                | .[1]
+          - composer.msi.json
+          - composer.magento.json
+        chdir: "{{ raccoon_demo_app_dir }}"
+      changed_when: false
+      register: composer_json_msi_update
 
-#     - name: "Install merged composer.json"
-#       copy:
-#         content: "{{ composer_json_msi_update.stdout | from_json | to_nice_json(indent=4) }}"
-#         dest: "{{ raccoon_demo_app_dir }}/composer.json"
-#         validate: composer validate %s
+    - name: "Install merged composer.json"
+      copy:
+        content: "{{ composer_json_msi_update.stdout | from_json | to_nice_json(indent=4) }}"
+        dest: "{{ raccoon_demo_app_dir }}/composer.json"
+        validate: composer validate %s
 
-#     # Temporary use --ignore-platform-reqs as one of the MageSuite
-#     # translation center package still does not allow PHP 7.3
-#     - name: "Install Magento composer deps"
-#       composer:
-#         command: install
-#         arguments: "--ignore-platform-reqs"
-#         working_dir: "{{ raccoon_demo_app_dir }}"
-#         prefer_dist: yes
+    # Temporary use --ignore-platform-reqs as one of the MageSuite
+    # translation center package still does not allow PHP 7.3
+    - name: "Install Magento composer deps"
+      composer:
+        command: install
+        arguments: "--ignore-platform-reqs"
+        working_dir: "{{ raccoon_demo_app_dir }}"
+        prefer_dist: yes
 
-#     - name: "Require demo composer packages"
-#       composer:
-#         command: require
-#         arguments: "--ignore-platform-reqs {{ raccoon_demo_magento_composer_packages | join(' ') }}"
-#         working_dir: "{{ raccoon_demo_app_dir }}"
-#         prefer_dist: yes
+    - name: "Require demo composer packages"
+      composer:
+        command: require
+        arguments: "--ignore-platform-reqs {{ raccoon_demo_magento_composer_packages | join(' ') }}"
+        working_dir: "{{ raccoon_demo_app_dir }}"
+        prefer_dist: yes
 
 
 - name: Build composer-packaged theme
