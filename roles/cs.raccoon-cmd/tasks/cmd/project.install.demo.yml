@@ -7,6 +7,14 @@
     magento_scd_advanced_js_bundling: no      # Docker in docker, huh?
     magento_deploy_auto_reindex: yes
 
+- name: Set production-optimized PHP opcache configuration
+  set_fact:
+    php_opcache_consistency_checks: 0
+    php_opcache_file_update_protection: 0
+    php_opcache_validate_timestamps: 0
+    php_opcache_revalidate_path: 0
+  when: raccoon_project_production_mode
+
 # - name: Install Magento sources
 #   become: yes
 #   become_user: "{{ magento_user }}"
@@ -100,6 +108,11 @@
 - name: Reconfigure HTTP services for production mode
   include_tasks: cmd.yml
   vars: { raccoon_command: 'project:services:http:configure' }
+  when: raccoon_project_production_mode
+
+- name: Reconfigure PHP for production mode
+  include_tasks: cmd.yml
+  vars: { raccoon_command: 'project:services:php:configure' }
   when: raccoon_project_production_mode
 
 - name: Switch to the demo project
