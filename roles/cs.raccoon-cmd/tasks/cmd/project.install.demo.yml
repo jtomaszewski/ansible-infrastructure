@@ -77,7 +77,7 @@
       copy:
         content: "{{ composer_json_msi_update.stdout | from_json | to_nice_json(indent=4) }}"
         dest: "{{ raccoon_demo_app_dir }}/composer.json"
-        validate: composer validate %s
+        validate: /usr/local/bin/composer validate %s
 
     # Temporary use --ignore-platform-reqs as one of the MageSuite
     # translation center package still does not allow PHP 7.3
