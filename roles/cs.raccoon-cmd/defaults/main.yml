@@ -21,7 +21,7 @@ raccoon_demo_magento_version: "2.3.4-p2"
 raccoon_demo_magento_inventory_version: "1.1.5"
 raccoon_demo_magento_sample_data_version: "{{ raccoon_demo_magento_version }}-develop"
 raccoon_demo_magento_sample_data_install: yes
-raccoon_demo_magento_scd_parallel_jobs: "{{ ansible_processor_vcpus | default(ansible_processor_cores + 1) | default(1) }}"
+raccoon_demo_magento_scd_parallel_jobs: "{{ ansible_processor_vcpus | default(ansible_processor_cores | default(0) + 1) }}"
 raccoon_demo_magento_scd_languages: [ en_US ]
 raccoon_demo_magento_scd_excluded_themes: []
 raccoon_demo_magento_composer_packages:
