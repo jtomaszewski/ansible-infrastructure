@@ -10,7 +10,12 @@
       - name: Switch the frontend theme id in default scope
         path: "design/theme/theme_id"
         value: "{{ raccoon_demo_magento_theme_id }}"
-        enabled: "{{ raccoon_demo_magento_theme_id | default(false, true) }}"
+        enabled: >-
+          {{
+              raccoon_demo_magento_theme_id is defined
+                and raccoon_demo_magento_theme_id is not none
+                and raccoon_demo_magento_theme_id != false
+          }}
         default: false
     # Remove base-urls so shop can be accessed by IP / without domain
     magento_core_config_settings_to_remove_extra:
@@ -130,7 +135,7 @@
   include_tasks: cmd.yml
   vars: { raccoon_command: 'project:switch' }
 
-- name: Resize Magento images to speed up browsing later
+- name: Resize Magento images to speed up browsing later (this will take a very long time)
   command:
     cmd: bin/magento catalog:images:resize
     chdir: "{{ raccoon_project_dir }}"
