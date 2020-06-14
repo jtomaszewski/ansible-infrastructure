@@ -3,9 +3,20 @@
     mageops_project: "{{ raccoon_demo_app_name }}"
     magento_scd_parallel_jobs: "{{ raccoon_demo_magento_scd_parallel_jobs | default(1) }}"
     magento_scd_languages: "{{ raccoon_demo_magento_scd_languages }}"
-    magento_scd_excluded_themes: []
+    magento_scd_excluded_themes: "{{ raccoon_demo_magento_scd_excluded_themes }}"
     magento_scd_advanced_js_bundling: no      # Docker in docker, huh?
     magento_deploy_auto_reindex: yes
+    magento_core_config_settings_extra:
+      - name: Switch the frontend theme id in default scope
+        path: "design/theme/theme_id"
+        value: "{{ magento_core_config_cron_use_separate_process_for_default_group | ternary(1, 0) | string }}"
+        enabled: "{{ raccoon_demo_magento_theme_id | default(false, true) }}"
+        default: false
+    # Remove base-urls so shop can be accessed by IP / without domain
+    magento_core_config_settings_to_remove_extra:
+      - web/unsecure/base_url
+      - web/secure/base_url
+
 
 - name: Set production-optimized PHP opcache configuration
   set_fact:

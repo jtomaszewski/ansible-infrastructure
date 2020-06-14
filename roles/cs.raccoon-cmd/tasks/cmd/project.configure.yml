@@ -9,6 +9,28 @@
     groups: "{{ magento_group }}"
     append: yes
 
+# In case previous setup:install was somehow broken the next
+# one will not run, but we can fix this situation:
+#  - remove /generated contents
+#  - flush redis
+#  - dump autoload
+
+- name: Remove generated Magento code
+  file:
+    path: "{{ raccoon_project_dir }}/generated"
+    state: absent
+
+- name: Flush redis
+  command:
+    cmd: redis-cli FLUSHALL
+    warn: no
+
+- name: Dump autoload
+  command:
+    cmd: composer dump-autoload
+    chdir: "{{ raccoon_project_dir }}"
+    warn: no
+
 - name: Set up Magento installation (DEVELOPMENT)
   include_role:
     name: cs.magento-configure
