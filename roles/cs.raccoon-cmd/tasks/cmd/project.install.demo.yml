@@ -9,7 +9,7 @@
     magento_core_config_settings_extra:
       - name: Switch the frontend theme id in default scope
         path: "design/theme/theme_id"
-        value: "{{ magento_core_config_cron_use_separate_process_for_default_group | ternary(1, 0) | string }}"
+        value: "{{ raccoon_demo_magento_theme_id }}"
         enabled: "{{ raccoon_demo_magento_theme_id | default(false, true) }}"
         default: false
     # Remove base-urls so shop can be accessed by IP / without domain
