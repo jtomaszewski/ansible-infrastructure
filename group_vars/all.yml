@@ -557,6 +557,7 @@ mageops_app_user: "{{ mageops_app_type }}"
 mageops_app_group: "{{ mageops_app_user }}"
 mageops_app_uid: 1500
 mageops_app_gid: "{{ mageops_app_uid }}"
+mageops_app_umask: '0022'
 
 # MySQL instance shall be provisioned? (or provide host)
 mageops_mysql_create: yes
@@ -765,6 +766,7 @@ magento_user: "{{ mageops_app_user }}"
 magento_group: "{{ mageops_app_group }}"
 magento_uid: "{{ mageops_app_uid }}"
 magento_gid: "{{ mageops_app_gid }}"
+magento_umask: "{{ mageops_app_umask }}"
 
 magento_elasticsearch_index_alias: "{{ mageops_app_name }}"
 
@@ -1153,6 +1155,8 @@ php_packages:
 php_conf_fragment_dir_path: "/etc/php.d"
 
 php_fpm_pool_name: "{{ mageops_app_type }}"
+
+php_fpm_umask: "{{ mageops_app_umask }}"
 
 php_fpm_run_dir_path: "/var/run/php-fpm"
 php_fpm_log_dir_path: "/var/log/php-fpm"
