@@ -130,5 +130,10 @@
   include_tasks: cmd.yml
   vars: { raccoon_command: 'project:switch' }
 
+- name: Resize Magento images to speed up browsing later
+  command:
+    cmd: bin/magento catalog:images:resize
+    chdir: "{{ raccoon_project_dir }}"
+
 
 
