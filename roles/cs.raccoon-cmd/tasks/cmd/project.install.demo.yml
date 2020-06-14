@@ -139,6 +139,9 @@
   command:
     cmd: bin/magento catalog:images:resize
     chdir: "{{ raccoon_project_dir }}"
+  async: 3600
+  poll: 5
+
 
 
 
