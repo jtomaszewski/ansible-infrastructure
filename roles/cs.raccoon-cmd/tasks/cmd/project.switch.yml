@@ -40,6 +40,10 @@
 - name: Ensure that Magento maintenance mode is disabled
   become: yes
   become_user: "{{ magento_user }}"
-  command: "php {{ magento_release_dir }}/bin/magento maintenance:disable"
+  command: 
+    argv:
+      - "php"
+      - "{{ magento_release_dir }}/bin/magento" 
+      - "maintenance:disable"
   changed_when: false
 

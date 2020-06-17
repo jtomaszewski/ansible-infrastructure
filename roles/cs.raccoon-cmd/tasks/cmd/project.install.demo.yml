@@ -122,6 +122,8 @@
 
 - name: Run catalog:images:resize
   when: "{{ raccoon_demo_magento_catalog_image_resize | default(false) }}"
+  become: yes
+  become_user: "{{ magento_user }}"
   block:
     - name: "[Async] Magento Image Resize (speed up browsing later - this will take a very long time)"
       command:

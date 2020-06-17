@@ -26,6 +26,8 @@
     warn: no
 
 - name: Dump autoload
+  become: yes
+  become_user: "{{ magento_user }}"
   command:
     argv: 
       - /usr/local/bin/composer 
@@ -34,5 +36,7 @@
     warn: no
 
 - name: Set up Magento installation
+  become: yes
+  become_user: "{{ magento_user }}"
   include_role:
     name: cs.magento-configure
