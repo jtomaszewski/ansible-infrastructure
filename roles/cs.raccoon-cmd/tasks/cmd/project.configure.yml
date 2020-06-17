@@ -27,7 +27,9 @@
 
 - name: Dump autoload
   command:
-    cmd: composer dump-autoload
+    argv: 
+      - /usr/local/bin/composer 
+      - dump-autoload
     chdir: "{{ raccoon_project_dir }}"
     warn: no
 
