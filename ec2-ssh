@@ -1,3 +1,0 @@
-#!/bin/sh
-
-ssh root@$(./ec2-ip $1)

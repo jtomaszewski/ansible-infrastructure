@@ -95,12 +95,12 @@ of this repository succesively.
 ## Managing current EC2 nodes
 
 ```sh
-./ec2-ip # Returns IP of app node
-./ec2-ip varnish # as above, of varnish node
-./ec2-ip persistent # as above, of persistent node
+bin/ec2-ip # Returns IP of app node
+bin/ec2-ip varnish # as above, of varnish node
+bin/ec2-ip persistent # as above, of persistent node
 
-./ec2-ssh # SSHs into app node
-./ec2-ssh varnish # as above, into varnish node
+bin/ec2-ssh # SSHs into app node
+bin/ec2-ssh varnish # as above, into varnish node
 ```
 
 ### SSH utils on an ec2 node
@@ -108,7 +108,11 @@ of this repository succesively.
 ```sh
 mageops-env # prints mageops env vars
 
-mageops-sys-status
+mageops-sys-status # prints general info about cpu, io, memory, running processes
+
+mageops-consumers # prints ongoing magento queue consumer processes
+
+mag # `cd`s into magento directory and runs `bin/magento`
 ```
 
 <p align="right">

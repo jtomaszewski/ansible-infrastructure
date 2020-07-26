@@ -1,0 +1,5 @@
+#!/bin/sh
+
+set -e
+
+ssh root@$(bin/ec2-ip $1)

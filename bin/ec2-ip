@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e
+
 function contains() {
   local n=$#
   local value=${!n}
