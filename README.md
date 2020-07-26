@@ -116,6 +116,7 @@ mageops-consumers # prints ongoing magento queue consumer processes
 
 magcd # `cd` into magento directory
 mag # `cd` into magento directory and runs `bin/magento`
+magcf # runs `bin/magento cache:flush`
 ```
 
 <p align="right">
