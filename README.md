@@ -103,6 +103,14 @@ of this repository succesively.
 ./ec2-ssh varnish # as above, into varnish node
 ```
 
+### SSH utils on an ec2 node
+
+```sh
+mageops-env # prints mageops env vars
+
+mageops-sys-status
+```
+
 <p align="right">
 <em>Brought to life by</em><br/>
 <a href="https://creativestyle.pl">
