@@ -2,4 +2,20 @@
 
 set -e
 
-ssh root@$(bin/ec2-ip $1)
+NODE_TYPE=$1
+USER=root
+
+if test "$NODE_TYPE" == "" || test "$NODE_TYPE" == "app"; then
+  NODE_TYPE=app
+  USER=magento
+fi
+
+if [[ $NODE_TYPE == *"@"* ]]; then
+  IFS="@" read USER NODE_TYPE <<< "$1"
+fi
+
+echo "SSHing as $USER into groomershop-dev-$NODE_TYPE node"
+
+IP=$(bin/ec2-ip $NODE_TYPE)
+
+ssh $USER@$IP
