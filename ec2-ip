@@ -1,0 +1,21 @@
+#!/bin/sh
+
+function contains() {
+  local n=$#
+  local value=${!n}
+  for ((i=1;i < $#;i++)) {
+    if [ "${!i}" == "${value}" ]; then
+      return 0
+    fi
+  }
+  return 1
+}
+
+TYPES=("app" "varnish" "persistent")
+TYPE=${1:-app}
+if ! contains "${TYPES[@]}" $TYPE; then
+  echo "Usage: ./find-ip app|varnish|persistent"
+  exit 1
+fi
+
+aws ec2 describe-instances  --filters "Name=tag:Name,Values=groomershop-dev-$TYPE" | jq '.Reservations[0].Instances[0].PublicIpAddress' -r
